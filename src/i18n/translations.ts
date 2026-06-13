@@ -2,7 +2,8 @@ export type Lang = 'en' | 'ru' | 'uk';
 
 export const translations: Record<Lang, Record<string, string>> = {
   en: {
-    // Header
+    'site.name': 'Cyber Academy',
+
     'nav.courses': 'Courses',
     'nav.dashboard': 'Dashboard',
     'nav.createCourse': 'Create Course',
@@ -10,8 +11,8 @@ export const translations: Record<Lang, Record<string, string>> = {
     'nav.signOut': 'Sign Out',
     'nav.profile': 'Profile',
     'nav.schedule': 'Schedule',
+    'nav.theme': 'Theme',
 
-    // Landing
     'landing.badge': 'New platform — Start learning today',
     'landing.title1': 'Learn skills that',
     'landing.title2': 'shape your future',
@@ -29,11 +30,10 @@ export const translations: Record<Lang, Record<string, string>> = {
     'landing.feature4Title': 'AI Study Assistant',
     'landing.feature4Desc': 'Get instant help and explanations from your personal AI tutor',
     'landing.ctaTitle': 'Ready to start learning?',
-    'landing.ctaSub': 'Join students already building their future with LearnFlow.',
+    'landing.ctaSub': 'Join students already building their future with Cyber Academy.',
     'landing.exploreAll': 'Explore All Courses',
 
-    // Auth
-    'auth.welcome': 'Welcome to LearnFlow',
+    'auth.welcome': 'Welcome to Cyber Academy',
     'auth.signInSub': 'Sign in to access your courses and dashboard',
     'auth.google': 'Continue with Google',
     'auth.apple': 'Continue with Apple',
@@ -45,8 +45,13 @@ export const translations: Record<Lang, Record<string, string>> = {
     'auth.instructor': 'Instructor',
     'auth.instructorDesc': 'I want to teach and create courses',
     'auth.continue': 'Continue',
+    'auth.adminLogin': 'Instructor Login',
+    'auth.adminEmail': 'Email',
+    'auth.adminPassword': 'Password',
+    'auth.adminSignIn': 'Sign In as Instructor',
+    'auth.adminError': 'Invalid credentials',
+    'auth.orDivider': 'or',
 
-    // Courses
     'courses.title': 'Explore Courses',
     'courses.subtitle': 'Find the perfect course to advance your skills',
     'courses.search': 'Search courses...',
@@ -60,7 +65,6 @@ export const translations: Record<Lang, Record<string, string>> = {
     'courses.noCoursesSub': 'Try adjusting your search or filters',
     'courses.free': 'Free',
 
-    // Course Detail
     'course.backToCourses': 'Back to courses',
     'course.enrolled': 'Enrolled',
     'course.signInToEnroll': 'Sign in to enroll',
@@ -71,7 +75,6 @@ export const translations: Record<Lang, Record<string, string>> = {
     'course.start': 'Start',
     'course.notFound': 'Course not found',
 
-    // Student Dashboard
     'dashboard.welcome': 'Welcome back',
     'dashboard.trackProgress': 'Track your progress and manage your learning',
     'dashboard.enrolledCourses': 'Enrolled Courses',
@@ -88,7 +91,6 @@ export const translations: Record<Lang, Record<string, string>> = {
     'dashboard.videoCallsSub': 'Join live sessions with your instructors',
     'dashboard.browseCourses': 'Browse Courses',
 
-    // Instructor Dashboard
     'instructor.title': 'Instructor Dashboard',
     'instructor.subtitle': 'Manage your courses, content, and schedule',
     'instructor.manageSchedule': 'Manage Schedule',
@@ -102,8 +104,11 @@ export const translations: Record<Lang, Record<string, string>> = {
     'instructor.createCourse': 'Create Course',
     'instructor.upcomingTitle': 'Upcoming Sessions',
     'instructor.joinCall': 'Join Call',
+    'instructor.editCourse': 'Edit Course',
+    'instructor.manageContent': 'Manage Content',
+    'instructor.addLesson': 'Add Lesson',
+    'instructor.editLesson': 'Edit Lesson',
 
-    // Create Course
     'create.backToDashboard': 'Back to dashboard',
     'create.title': 'Create New Course',
     'create.basicInfo': 'Basic Information',
@@ -131,7 +136,6 @@ export const translations: Record<Lang, Record<string, string>> = {
     'create.saveCourse': 'Save Course',
     'create.saving': 'Saving...',
 
-    // Schedule
     'schedule.title': 'Schedule',
     'schedule.subtitleInstructor': 'Manage your availability and sessions',
     'schedule.subtitleStudent': 'Your upcoming sessions and bookings',
@@ -146,7 +150,6 @@ export const translations: Record<Lang, Record<string, string>> = {
     'schedule.cancel': 'Cancel',
     'schedule.join': 'Join',
 
-    // Instructor Schedule
     'instructorSchedule.title': 'Schedule Management',
     'instructorSchedule.subtitle': 'Set your availability for students to book',
     'instructorSchedule.addSlot': 'Add Time Slot',
@@ -159,7 +162,6 @@ export const translations: Record<Lang, Record<string, string>> = {
     'instructorSchedule.noSlots': 'No upcoming slots',
     'instructorSchedule.noSlotsSub': 'Add time slots for students to book sessions with you',
 
-    // Video
     'video.title': 'Video Call',
     'video.subtitle': 'Join a live video session with your instructor',
     'video.muted': 'Muted',
@@ -168,7 +170,6 @@ export const translations: Record<Lang, Record<string, string>> = {
     'video.cameraOn': 'Camera on',
     'video.joinCall': 'Join Call',
 
-    // Profile
     'profile.title': 'Profile Settings',
     'profile.displayName': 'Display Name',
     'profile.bio': 'Bio',
@@ -178,8 +179,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     'profile.saveChanges': 'Save Changes',
     'profile.saving': 'Saving...',
 
-    // AI Assistant
-    'ai.greeting': "Hi! I'm your LearnFlow AI assistant. I can help you find courses, understand how things work, and answer questions about the platform. What can I help you with?",
+    'ai.greeting': "Hi! I'm your Cyber Academy AI assistant. I can help you find courses, understand how things work, and answer questions about the platform. What can I help you with?",
     'ai.placeholder': 'Ask me anything...',
     'ai.title': 'AI Assistant',
     'ai.status': 'Always ready to help',
@@ -192,14 +192,12 @@ export const translations: Record<Lang, Record<string, string>> = {
     'ai.responseSchedule': 'You can view and manage your schedule from the Schedule page. Instructors create available time slots, and students can book sessions that work for them.',
     'ai.responseVideo': 'Video calls use Jitsi Meet, which runs directly in your browser. When it\'s time for your session, go to the Video Call page or click "Join Call" from your schedule.',
     'ai.responseInstructor': 'To become an instructor, go to your profile settings and switch your role to "Instructor". Then you\'ll be able to create courses and manage your schedule.',
-    'ai.responseDefault': 'I\'m here to help you navigate LearnFlow! You can ask me about courses, enrollment, scheduling, video calls, or becoming an instructor. What would you like to know?',
+    'ai.responseDefault': 'I\'m here to help you navigate Cyber Academy! You can ask me about courses, enrollment, scheduling, video calls, or becoming an instructor. What would you like to know?',
 
-    // Footer
     'footer.privacy': 'Privacy',
     'footer.terms': 'Terms',
     'footer.support': 'Support',
 
-    // Categories
     'category.Programming': 'Programming',
     'category.Design': 'Design',
     'category.Business': 'Business',
@@ -207,7 +205,6 @@ export const translations: Record<Lang, Record<string, string>> = {
     'category.Music': 'Music',
     'category.Health': 'Health',
 
-    // Common
     'common.new': 'New',
     'common.noRating': 'No rating',
     'common.instructor': 'Instructor',
@@ -225,6 +222,8 @@ export const translations: Record<Lang, Record<string, string>> = {
   },
 
   ru: {
+    'site.name': 'Cyber Academy',
+
     'nav.courses': 'Курсы',
     'nav.dashboard': 'Кабинет',
     'nav.createCourse': 'Создать курс',
@@ -232,6 +231,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     'nav.signOut': 'Выйти',
     'nav.profile': 'Профиль',
     'nav.schedule': 'Расписание',
+    'nav.theme': 'Тема',
 
     'landing.badge': 'Новая платформа — Начните обучение сегодня',
     'landing.title1': 'Учитесь навыкам,',
@@ -250,10 +250,10 @@ export const translations: Record<Lang, Record<string, string>> = {
     'landing.feature4Title': 'ИИ-помощник',
     'landing.feature4Desc': 'Получайте мгновенную помощь и объяснения от личного ИИ-тьютора',
     'landing.ctaTitle': 'Готовы начать обучение?',
-    'landing.ctaSub': 'Присоединяйтесь к студентам, которые уже строят своё будущее с LearnFlow.',
+    'landing.ctaSub': 'Присоединяйтесь к студентам, которые уже строят своё будущее с Cyber Academy.',
     'landing.exploreAll': 'Все курсы',
 
-    'auth.welcome': 'Добро пожаловать в LearnFlow',
+    'auth.welcome': 'Добро пожаловать в Cyber Academy',
     'auth.signInSub': 'Войдите, чтобы получить доступ к курсам и кабинету',
     'auth.google': 'Войти через Google',
     'auth.apple': 'Войти через Apple',
@@ -265,6 +265,12 @@ export const translations: Record<Lang, Record<string, string>> = {
     'auth.instructor': 'Преподаватель',
     'auth.instructorDesc': 'Я хочу преподавать и создавать курсы',
     'auth.continue': 'Продолжить',
+    'auth.adminLogin': 'Вход для преподавателя',
+    'auth.adminEmail': 'Email',
+    'auth.adminPassword': 'Пароль',
+    'auth.adminSignIn': 'Войти как преподаватель',
+    'auth.adminError': 'Неверные данные',
+    'auth.orDivider': 'или',
 
     'courses.title': 'Каталог курсов',
     'courses.subtitle': 'Найдите идеальный курс для развития навыков',
@@ -318,6 +324,10 @@ export const translations: Record<Lang, Record<string, string>> = {
     'instructor.createCourse': 'Создать курс',
     'instructor.upcomingTitle': 'Предстоящие сессии',
     'instructor.joinCall': 'Войти в звонок',
+    'instructor.editCourse': 'Редактировать курс',
+    'instructor.manageContent': 'Управление контентом',
+    'instructor.addLesson': 'Добавить урок',
+    'instructor.editLesson': 'Редактировать урок',
 
     'create.backToDashboard': 'Назад в кабинет',
     'create.title': 'Создать новый курс',
@@ -389,7 +399,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     'profile.saveChanges': 'Сохранить изменения',
     'profile.saving': 'Сохранение...',
 
-    'ai.greeting': 'Привет! Я ваш ИИ-помощник LearnFlow. Могу помочь найти курсы, разобраться в работе платформы и ответить на вопросы. Чем могу помочь?',
+    'ai.greeting': 'Привет! Я ваш ИИ-помощник Cyber Academy. Могу помочь найти курсы, разобраться в работе платформы и ответить на вопросы. Чем могу помочь?',
     'ai.placeholder': 'Задайте вопрос...',
     'ai.title': 'ИИ-помощник',
     'ai.status': 'Всегда готов помочь',
@@ -402,7 +412,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     'ai.responseSchedule': 'Расписание доступно на странице Расписание. Преподаватели создают временные слоты, а ученики могут бронировать подходящее время.',
     'ai.responseVideo': 'Видеозвонки работают через Jitsi Meet прямо в браузере. Когда наступит время сессии, перейдите на страницу Видеозвонок или нажмите "Войти" в расписании.',
     'ai.responseInstructor': 'Чтобы стать преподавателем, перейдите в настройки профиля и переключите роль на "Преподаватель". После этого вы сможете создавать курсы и управлять расписанием.',
-    'ai.responseDefault': 'Я помогу вам разобраться в LearnFlow! Спрашивайте о курсах, записи, расписании, видеозвонках или роли преподавателя. Что вас интересует?',
+    'ai.responseDefault': 'Я помогу вам разобраться в Cyber Academy! Спрашивайте о курсах, записи, расписании, видеозвонках или роли преподавателя. Что вас интересует?',
 
     'footer.privacy': 'Конфиденциальность',
     'footer.terms': 'Условия',
@@ -432,6 +442,8 @@ export const translations: Record<Lang, Record<string, string>> = {
   },
 
   uk: {
+    'site.name': 'Cyber Academy',
+
     'nav.courses': 'Курси',
     'nav.dashboard': 'Кабінет',
     'nav.createCourse': 'Створити курс',
@@ -439,6 +451,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     'nav.signOut': 'Вийти',
     'nav.profile': 'Профіль',
     'nav.schedule': 'Розклад',
+    'nav.theme': 'Тема',
 
     'landing.badge': 'Нова платформа — Почніть навчання сьогодні',
     'landing.title1': 'Навчайтесь навичкам,',
@@ -457,10 +470,10 @@ export const translations: Record<Lang, Record<string, string>> = {
     'landing.feature4Title': 'ІІ-помічник',
     'landing.feature4Desc': 'Отримуйте миттєву допомогу та пояснення від особистого ІІ-тьютора',
     'landing.ctaTitle': 'Готові почати навчання?',
-    'landing.ctaSub': 'Приєднуйтесь до студентів, які вже будують своє майбутнє з LearnFlow.',
+    'landing.ctaSub': 'Приєднуйтесь до студентів, які вже будують своє майбутнє з Cyber Academy.',
     'landing.exploreAll': 'Усі курси',
 
-    'auth.welcome': 'Ласкаво просимо до LearnFlow',
+    'auth.welcome': 'Ласкаво просимо до Cyber Academy',
     'auth.signInSub': 'Увійдіть, щоб отримати доступ до курсів та кабінету',
     'auth.google': 'Увійти через Google',
     'auth.apple': 'Увійти через Apple',
@@ -472,6 +485,12 @@ export const translations: Record<Lang, Record<string, string>> = {
     'auth.instructor': 'Викладач',
     'auth.instructorDesc': 'Я хочу викладати та створювати курси',
     'auth.continue': 'Продовжити',
+    'auth.adminLogin': 'Вхід для викладача',
+    'auth.adminEmail': 'Email',
+    'auth.adminPassword': 'Пароль',
+    'auth.adminSignIn': 'Увійти як викладач',
+    'auth.adminError': 'Невірні дані',
+    'auth.orDivider': 'або',
 
     'courses.title': 'Каталог курсів',
     'courses.subtitle': 'Знайдіть ідеальний курс для розвитку навичок',
@@ -525,6 +544,10 @@ export const translations: Record<Lang, Record<string, string>> = {
     'instructor.createCourse': 'Створити курс',
     'instructor.upcomingTitle': 'Майбутні сесії',
     'instructor.joinCall': 'Увійти в дзвінок',
+    'instructor.editCourse': 'Редагувати курс',
+    'instructor.manageContent': 'Управління контентом',
+    'instructor.addLesson': 'Додати урок',
+    'instructor.editLesson': 'Редагувати урок',
 
     'create.backToDashboard': 'Назад до кабінету',
     'create.title': 'Створити новий курс',
@@ -596,7 +619,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     'profile.saveChanges': 'Зберегти зміни',
     'profile.saving': 'Збереження...',
 
-    'ai.greeting': 'Привіт! Я ваш ІІ-помічник LearnFlow. Можу допомогти знайти курси, розібратись у роботі платформи та відповісти на питання. Чим можу допомогти?',
+    'ai.greeting': 'Привіт! Я ваш ІІ-помічник Cyber Academy. Можу допомогти знайти курси, розібратись у роботі платформи та відповісти на питання. Чим можу допомогти?',
     'ai.placeholder': 'Задайте питання...',
     'ai.title': 'ІІ-помічник',
     'ai.status': 'Завжди готовий допомогти',
@@ -609,7 +632,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     'ai.responseSchedule': 'Розклад доступний на сторінці Розклад. Викладачі створюють часові слоти, а учні можуть бронювати зручний час.',
     'ai.responseVideo': 'Відеодзвінки працюють через Jitsi Meet прямо в браузері. Коли настане час сесії, перейдіть на сторінку Відеодзвінок або натисніть "Увійти" в розкладі.',
     'ai.responseInstructor': 'Щоб стати викладачем, перейдіть у налаштування профілю та перемкніть роль на "Викладач". Після цього ви зможете створювати курси та керувати розкладом.',
-    'ai.responseDefault': 'Я допоможу вам розібратись в LearnFlow! Питайте про курси, запис, розклад, відеодзвінки або роль викладача. Що вас цікавить?',
+    'ai.responseDefault': 'Я допоможу вам розібратись в Cyber Academy! Питайте про курси, запис, розклад, відеодзвінки або роль викладача. Що вас цікавить?',
 
     'footer.privacy': 'Конфіденційність',
     'footer.terms': 'Умови',

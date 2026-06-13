@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 import { I18nProvider } from './i18n';
 import Layout from './components/layout/Layout';
 import LandingPage from './pages/LandingPage';
@@ -18,27 +19,29 @@ import AIAssistant from './pages/AIAssistantPage';
 function App() {
   return (
     <BrowserRouter>
-      <I18nProvider>
-        <AuthProvider>
-          <Routes>
-            <Route element={<Layout />}>
-              <Route path="/" element={<LandingPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/courses" element={<CoursesPage />} />
-              <Route path="/courses/:id" element={<CourseDetailPage />} />
-              <Route path="/dashboard" element={<StudentDashboard />} />
-              <Route path="/instructor" element={<InstructorDashboard />} />
-              <Route path="/instructor/create" element={<CreateCoursePage />} />
-              <Route path="/instructor/schedule" element={<InstructorSchedulePage />} />
-              <Route path="/instructor/edit/:id" element={<CreateCoursePage />} />
-              <Route path="/schedule" element={<SchedulePage />} />
-              <Route path="/video" element={<VideoCallPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-            </Route>
-          </Routes>
-          <AIAssistant />
-        </AuthProvider>
-      </I18nProvider>
+      <ThemeProvider>
+        <I18nProvider>
+          <AuthProvider>
+            <Routes>
+              <Route element={<Layout />}>
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/courses" element={<CoursesPage />} />
+                <Route path="/courses/:id" element={<CourseDetailPage />} />
+                <Route path="/dashboard" element={<StudentDashboard />} />
+                <Route path="/instructor" element={<InstructorDashboard />} />
+                <Route path="/instructor/create" element={<CreateCoursePage />} />
+                <Route path="/instructor/schedule" element={<InstructorSchedulePage />} />
+                <Route path="/instructor/edit/:id" element={<CreateCoursePage />} />
+                <Route path="/schedule" element={<SchedulePage />} />
+                <Route path="/video" element={<VideoCallPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
+              </Route>
+            </Routes>
+            <AIAssistant />
+          </AuthProvider>
+        </I18nProvider>
+      </ThemeProvider>
     </BrowserRouter>
   );
 }

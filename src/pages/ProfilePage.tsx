@@ -28,51 +28,51 @@ export default function ProfilePage() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 mb-6 transition-colors">
+      <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 mb-6 transition-colors">
         <ArrowLeft className="w-4 h-4" /> {t('create.backToDashboard').replace(t('create.backToDashboard').split(' ')[0], '')}
       </button>
 
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">{t('profile.title')}</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">{t('profile.title')}</h1>
 
-      <form onSubmit={handleSave} className="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
+      <form onSubmit={handleSave} className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-6 space-y-5">
         <div className="flex items-center gap-4 mb-2">
           {profile?.photoURL ? (
             <img src={profile.photoURL} alt="" className="w-16 h-16 rounded-2xl object-cover" />
           ) : (
-            <div className="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center"><User className="w-7 h-7 text-emerald-600" /></div>
+            <div className="w-16 h-16 bg-emerald-50 dark:bg-emerald-900/20 rounded-2xl flex items-center justify-center"><User className="w-7 h-7 text-emerald-600 dark:text-emerald-400" /></div>
           )}
           <div>
-            <div className="font-medium text-gray-900">{profile?.email}</div>
+            <div className="font-medium text-gray-900 dark:text-white">{profile?.email}</div>
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">{t('profile.displayName')}</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('profile.displayName')}</label>
           <input type="text" value={displayName} onChange={e => setDisplayName(e.target.value)}
-            className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+            className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white" />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">{t('profile.bio')}</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('profile.bio')}</label>
           <textarea value={bio} onChange={e => setBio(e.target.value)} rows={3} placeholder={t('profile.bioPlaceholder')}
-            className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none" />
+            className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white resize-none" />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">{t('profile.role')}</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('profile.role')}</label>
           <div className="flex gap-3">
             {(['student', 'instructor'] as UserRole[]).map(r => (
               <button key={r} type="button" onClick={() => setRole(r)}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium border transition-all ${role === r ? 'bg-emerald-50 border-emerald-200 text-emerald-700' : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium border transition-all ${role === r ? 'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-700 text-emerald-700 dark:text-emerald-400' : 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'}`}>
                 {r === 'student' ? <User className="w-4 h-4" /> : <Shield className="w-4 h-4" />}
                 {r === 'student' ? t('auth.student') : t('auth.instructor')}
               </button>
             ))}
           </div>
-          <p className="text-xs text-gray-400 mt-2">{t('profile.roleHint')}</p>
+          <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">{t('profile.roleHint')}</p>
         </div>
 
-        <button type="submit" disabled={saving} className="flex items-center gap-2 bg-emerald-600 text-white px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50">
+        <button type="submit" disabled={saving} className="flex items-center gap-2 bg-emerald-600 dark:bg-emerald-600 text-white px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-emerald-700 dark:hover:bg-emerald-700 transition-colors disabled:opacity-50">
           <Save className="w-4 h-4" /> {saving ? t('profile.saving') : t('profile.saveChanges')}
         </button>
       </form>

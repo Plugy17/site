@@ -36,23 +36,23 @@ export default function CoursesPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('courses.title')}</h1>
-        <p className="text-gray-500">{t('courses.subtitle')}</p>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{t('courses.title')}</h1>
+        <p className="text-gray-500 dark:text-gray-400">{t('courses.subtitle')}</p>
       </div>
 
       <div className="flex flex-col md:flex-row gap-4 mb-8">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
           <input type="text" placeholder={t('courses.search')} value={search} onChange={e => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent" />
+            className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent dark:text-white" />
         </div>
         <select value={category} onChange={e => setCategory(e.target.value)}
-          className="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          className="px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white">
           <option value="All">{t('courses.all')}</option>
           {categoryKeys.map(c => <option key={c} value={c}>{t(`category.${c}`)}</option>)}
         </select>
         <select value={level} onChange={e => setLevel(e.target.value)}
-          className="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 capitalize">
+          className="px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white capitalize">
           <option value="All">{t('courses.allLevels')}</option>
           {levelKeys.map(l => <option key={l} value={l}>{t(`courses.${l}`)}</option>)}
         </select>
@@ -61,44 +61,44 @@ export default function CoursesPage() {
       {loading ? (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3, 4, 5, 6].map(i => (
-            <div key={i} className="bg-white rounded-2xl border border-gray-100 overflow-hidden animate-pulse">
-              <div className="h-40 bg-gray-200" />
-              <div className="p-5 space-y-3"><div className="h-4 bg-gray-200 rounded w-3/4" /><div className="h-3 bg-gray-200 rounded w-full" /><div className="h-3 bg-gray-200 rounded w-1/2" /></div>
+            <div key={i} className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden animate-pulse">
+              <div className="h-40 bg-gray-200 dark:bg-gray-700" />
+              <div className="p-5 space-y-3"><div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4" /><div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full" /><div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2" /></div>
             </div>
           ))}
         </div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-20">
-          <BookOpen className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-600 mb-1">{t('courses.noCourses')}</h3>
-          <p className="text-sm text-gray-400">{t('courses.noCoursesSub')}</p>
+          <BookOpen className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-600 dark:text-gray-300 mb-1">{t('courses.noCourses')}</h3>
+          <p className="text-sm text-gray-400 dark:text-gray-500">{t('courses.noCoursesSub')}</p>
         </div>
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map(course => (
-            <Link key={course.id} to={`/courses/${course.id}`} className="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg hover:border-emerald-200 transition-all">
-              <div className="h-40 bg-gradient-to-br from-emerald-100 to-teal-100 relative overflow-hidden">
+            <Link key={course.id} to={`/courses/${course.id}`} className="group bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-lg hover:border-emerald-200 dark:hover:border-emerald-700 transition-all">
+              <div className="h-40 bg-gradient-to-br from-emerald-100 dark:from-emerald-900/20 to-teal-100 dark:to-teal-900/20 relative overflow-hidden">
                 {course.thumbnail ? (
                   <img src={course.thumbnail} alt={course.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                 ) : (
-                  <div className="flex items-center justify-center h-full"><BookOpen className="w-12 h-12 text-emerald-300" /></div>
+                  <div className="flex items-center justify-center h-full"><BookOpen className="w-12 h-12 text-emerald-300 dark:text-emerald-400/60" /></div>
                 )}
-                <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm rounded-full px-2.5 py-1 text-xs font-medium text-emerald-700 capitalize">{t(`courses.${course.level}`)}</div>
+                <div className="absolute top-3 right-3 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full px-2.5 py-1 text-xs font-medium text-emerald-700 dark:text-emerald-300 capitalize">{t(`courses.${course.level}`)}</div>
               </div>
               <div className="p-5">
-                <div className="text-xs font-medium text-emerald-600 mb-2">{t(`category.${course.category}`) || course.category}</div>
-                <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-emerald-700 transition-colors">{course.title}</h3>
-                <p className="text-sm text-gray-500 line-clamp-2 mb-4">{course.description}</p>
-                <div className="flex items-center justify-between text-xs text-gray-400">
+                <div className="text-xs font-medium text-emerald-600 dark:text-emerald-400 mb-2">{t(`category.${course.category}`) || course.category}</div>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">{course.title}</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mb-4">{course.description}</p>
+                <div className="flex items-center justify-between text-xs text-gray-400 dark:text-gray-500">
                   <div className="flex items-center gap-3">
                     <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {course.duration}</span>
                     <span className="flex items-center gap-1"><Users className="w-3.5 h-3.5" /> {course.enrolledStudents?.length || 0}</span>
                   </div>
                   <span className="flex items-center gap-1"><Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" /> {course.rating || t('common.new')}</span>
                 </div>
-                <div className="mt-3 pt-3 border-t border-gray-50 flex items-center justify-between">
-                  <span className="text-lg font-bold text-gray-900">{course.price === 0 ? t('courses.free') : `$${course.price}`}</span>
-                  <span className="text-xs text-gray-400">{course.instructorName}</span>
+                <div className="mt-3 pt-3 border-t border-gray-50 dark:border-gray-700 flex items-center justify-between">
+                  <span className="text-lg font-bold text-gray-900 dark:text-white">{course.price === 0 ? t('courses.free') : `$${course.price}`}</span>
+                  <span className="text-xs text-gray-400 dark:text-gray-500">{course.instructorName}</span>
                 </div>
               </div>
             </Link>

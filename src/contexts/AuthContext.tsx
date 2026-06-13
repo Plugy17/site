@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect, type ReactNode } from '
 import {
   onAuthStateChanged,
   signInWithPopup,
+  signInWithEmailAndPassword,
   signOut as firebaseSignOut,
   type User,
 } from 'firebase/auth';
@@ -9,12 +10,16 @@ import { auth, googleProvider, appleProvider } from '../config/firebase';
 import { getUserProfile, createUserProfile, updateUserProfile } from '../services/firebase';
 import type { UserProfile } from '../types';
 
+const ADMIN_EMAIL = 'admin@cyberacademy.com';
+const ADMIN_PASSWORD = 'Academy12&';
+
 interface AuthContextType {
   user: User | null;
   profile: UserProfile | null;
   loading: boolean;
   signInWithGoogle: () => Promise<void>;
   signInWithApple: () => Promise<void>;
+  signInAsAdmin: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   signOut: () => Promise<void>;
   updateProfile: (data: Partial<UserProfile>) => Promise<void>;
 }
@@ -32,12 +37,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (firebaseUser) {
         let p = await getUserProfile(firebaseUser.uid);
         if (!p) {
+          const isAdmin = firebaseUser.email === ADMIN_EMAIL;
           p = {
             uid: firebaseUser.uid,
             email: firebaseUser.email || '',
-            displayName: firebaseUser.displayName || 'User',
+            displayName: firebaseUser.displayName || (isAdmin ? 'Admin' : 'User'),
             photoURL: firebaseUser.photoURL || undefined,
-            role: 'student',
+            role: isAdmin ? 'instructor' : 'student',
             createdAt: Date.now(),
           };
           await createUserProfile(p);
@@ -89,6 +95,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  async function signInAsAdmin(email: string, password: string): Promise<{ success: boolean; error?: string }> {
+    if (email !== ADMIN_EMAIL || password !== ADMIN_PASSWORD) {
+      return { success: false, error: 'Invalid admin credentials' };
+    }
+    try {
+      const cred = await signInWithEmailAndPassword(auth, email, password);
+      let p = await getUserProfile(cred.user.uid);
+      if (!p) {
+        p = {
+          uid: cred.user.uid,
+          email: cred.user.email || '',
+          displayName: 'Admin',
+          role: 'instructor',
+          createdAt: Date.now(),
+        };
+        await createUserProfile(p);
+        setProfile(p);
+      } else {
+        if (p.role !== 'instructor') {
+          await updateUserProfile(p.uid, { role: 'instructor' });
+          p = { ...p, role: 'instructor' };
+        }
+        setProfile(p);
+      }
+      return { success: true };
+    } catch (err: any) {
+      return { success: false, error: err.message || 'Login failed' };
+    }
+  }
+
   async function signOut() {
     await firebaseSignOut(auth);
     setUser(null);
@@ -102,7 +138,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, profile, loading, signInWithGoogle, signInWithApple, signOut, updateProfile }}>
+    <AuthContext.Provider value={{ user, profile, loading, signInWithGoogle, signInWithApple, signInAsAdmin, signOut, updateProfile }}>
       {children}
     </AuthContext.Provider>
   );

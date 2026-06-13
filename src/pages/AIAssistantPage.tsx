@@ -32,17 +32,17 @@ export default function AIAssistant() {
 
   return (
     <>
-      <button onClick={() => setOpen(!open)} className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-emerald-600 rounded-2xl shadow-lg shadow-emerald-600/30 flex items-center justify-center text-white hover:bg-emerald-500 transition-all hover:scale-105">
+      <button onClick={() => setOpen(!open)} className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-emerald-600 dark:bg-emerald-600 rounded-2xl shadow-lg shadow-emerald-600/30 flex items-center justify-center text-white hover:bg-emerald-500 dark:hover:bg-emerald-500 transition-all hover:scale-105">
         {open ? <X className="w-6 h-6" /> : <MessageCircle className="w-6 h-6" />}
       </button>
 
       {open && (
-        <div className="fixed bottom-24 right-6 z-50 w-96 max-w-[calc(100vw-3rem)] bg-white rounded-2xl shadow-2xl border border-gray-100 flex flex-col overflow-hidden" style={{ height: '500px' }}>
-          <div className="bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-4 flex items-center gap-3">
+        <div className="fixed bottom-24 right-6 z-50 w-96 max-w-[calc(100vw-3rem)] bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 flex flex-col overflow-hidden" style={{ height: '500px' }}>
+          <div className="bg-gradient-to-r from-emerald-600 dark:from-emerald-700 to-teal-600 dark:to-teal-700 px-5 py-4 flex items-center gap-3">
             <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center"><Sparkles className="w-5 h-5 text-white" /></div>
             <div>
               <div className="text-white font-semibold text-sm">{t('ai.title')}</div>
-              <div className="text-emerald-200 text-xs">{t('ai.status')}</div>
+              <div className="text-emerald-200 dark:text-emerald-300 text-xs">{t('ai.status')}</div>
             </div>
           </div>
 
@@ -50,13 +50,13 @@ export default function AIAssistant() {
             {messages.map(msg => (
               <div key={msg.id} className={`flex gap-2 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 {msg.role === 'assistant' && (
-                  <div className="w-7 h-7 bg-emerald-50 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5"><Bot className="w-4 h-4 text-emerald-600" /></div>
+                  <div className="w-7 h-7 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5"><Bot className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /></div>
                 )}
-                <div className={`max-w-[75%] px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed ${msg.role === 'user' ? 'bg-emerald-600 text-white rounded-br-md' : 'bg-gray-100 text-gray-700 rounded-bl-md'}`}>
+                <div className={`max-w-[75%] px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed ${msg.role === 'user' ? 'bg-emerald-600 dark:bg-emerald-600 text-white rounded-br-md' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-bl-md'}`}>
                   {msg.content}
                 </div>
                 {msg.role === 'user' && (
-                  <div className="w-7 h-7 bg-emerald-600 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5"><User className="w-4 h-4 text-white" /></div>
+                  <div className="w-7 h-7 bg-emerald-600 dark:bg-emerald-600 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5"><User className="w-4 h-4 text-white" /></div>
                 )}
               </div>
             ))}
@@ -66,16 +66,16 @@ export default function AIAssistant() {
           {messages.length <= 2 && (
             <div className="px-4 pb-2 flex flex-wrap gap-1.5">
               {[t('ai.suggest1'), t('ai.suggest2'), t('ai.suggest3'), t('ai.suggest4')].map(s => (
-                <button key={s} onClick={() => setInput(s)} className="text-xs bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full hover:bg-emerald-100 transition-colors">{s}</button>
+                <button key={s} onClick={() => setInput(s)} className="text-xs bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 px-3 py-1.5 rounded-full hover:bg-emerald-100 dark:hover:bg-emerald-900/40 transition-colors">{s}</button>
               ))}
             </div>
           )}
 
-          <div className="p-3 border-t border-gray-100">
+          <div className="p-3 border-t border-gray-100 dark:border-gray-700">
             <form onSubmit={e => { e.preventDefault(); handleSend(); }} className="flex gap-2">
               <input type="text" value={input} onChange={e => setInput(e.target.value)} placeholder={t('ai.placeholder')}
-                className="flex-1 px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
-              <button type="submit" className="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center text-white hover:bg-emerald-700 transition-colors flex-shrink-0">
+                className="flex-1 px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white" />
+              <button type="submit" className="w-10 h-10 bg-emerald-600 dark:bg-emerald-600 rounded-xl flex items-center justify-center text-white hover:bg-emerald-700 dark:hover:bg-emerald-700 transition-colors flex-shrink-0">
                 <Send className="w-4 h-4" />
               </button>
             </form>
