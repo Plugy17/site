@@ -2,6 +2,8 @@ import { createContext, useContext, useState, useEffect, type ReactNode } from '
 import {
   onAuthStateChanged,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signInWithEmailAndPassword,
   signOut as firebaseSignOut,
   type User,
@@ -32,6 +34,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Обработка результата редиректа (если пользователь был перенаправлен с Google/Apple)
+    getRedirectResult(auth).then(async (result) => {
+      if (result?.user) {
+        let p = await getUserProfile(result.user.uid);
+        if (!p) {
+          p = {
+            uid: result.user.uid,
+            email: result.user.email || '',
+            displayName: result.user.displayName || 'User',
+            photoURL: result.user.photoURL || undefined,
+            role: 'student',
+            createdAt: Date.now(),
+          };
+          await createUserProfile(p);
+        }
+        setProfile(p);
+      }
+    }).catch((err) => {
+      console.error('Redirect auth result error:', err);
+    });
+
     const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
       setUser(firebaseUser);
       if (firebaseUser) {
@@ -57,8 +80,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return unsub;
   }, []);
 
+  async function authWithPopup(provider: any) {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      return result;
+    } catch (err: any) {
+      // Если popup заблокирован браузером (Safari iOS) — используем редирект
+      if (err.code === 'auth/popup-blocked' || err.code === 'auth/popup-closed-by-user') {
+        await signInWithRedirect(auth, provider);
+        return null; // Редирект, результата здесь не будет
+      }
+      throw err;
+    }
+  }
+
   async function signInWithGoogle() {
-    const result = await signInWithPopup(auth, googleProvider);
+    const result = await authWithPopup(googleProvider);
+    if (!result) return; // redirect mode — результат обработает onAuthStateChanged
+
     let p = await getUserProfile(result.user.uid);
     if (!p) {
       p = {
@@ -77,7 +116,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function signInWithApple() {
-    const result = await signInWithPopup(auth, appleProvider);
+    const result = await authWithPopup(appleProvider);
+    if (!result) return; // redirect mode — результат обработает onAuthStateChanged
+
     let p = await getUserProfile(result.user.uid);
     if (!p) {
       p = {
