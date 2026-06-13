@@ -6,6 +6,7 @@ import {
   getRedirectResult,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  deleteUser,
   signOut as firebaseSignOut,
   type User,
 } from 'firebase/auth';
@@ -120,6 +121,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           cred = await createUserWithEmailAndPassword(auth, email, password);
         } else if (loginErr.code === 'auth/operation-not-allowed') {
           return { success: false, error: 'Вход по Email/Пароль не включён в Firebase Console. Зайдите в Authentication → Sign-in providers → Email/Password → Enable.' };
+        } else if (loginErr.code === 'auth/invalid-credential') {
+          // Пользователь существует, но пароль неверный — удаляем и создаём заново
+          // Сначала логинимся любым способом чтобы получить uid (временно входим)
+          try {
+            // Пробуем новый пароль
+            await createUserWithEmailAndPassword(auth, email, password);
+            // Не должно сработать, если email занят, но ловим ошибку ниже
+          } catch (createErr: any) {
+            if (createErr.code === 'auth/email-already-in-use') {
+              return { success: false, error: 'Admin уже существует в Firebase с другим паролем. Удали пользователя admin@cyberacademy.com вручную: Firebase Console → Authentication → Users → удалить пользователя. После этого попробуй снова.' };
+            }
+            throw createErr;
+          }
+          // Если createUserWithEmailAndPassword не выбросил ошибку — значит создали
+          cred = await signInWithEmailAndPassword(auth, email, password);
         } else {
           throw loginErr;
         }
