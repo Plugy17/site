@@ -7,4 +7,7 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
+  // Vite SPA fallback: if the request is not for an asset, serve index.html
+  // This handles 404s on page refresh for Vercel / any static host
+  appType: 'spa',
 });
