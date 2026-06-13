@@ -47,22 +47,22 @@ export default function StudentDashboard() {
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-5">
+        <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-xl border border-white/20 dark:border-gray-700/50 p-5 shadow-lg shadow-violet-500/5">
           <div className="w-10 h-10 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg flex items-center justify-center mb-3"><BookOpen className="w-5 h-5 text-emerald-600 dark:text-emerald-400" /></div>
           <div className="text-2xl font-bold text-gray-900 dark:text-white">{enrollments.length}</div>
           <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">{t('dashboard.enrolledCourses')}</div>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-5">
+        <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-xl border border-white/20 dark:border-gray-700/50 p-5 shadow-lg shadow-blue-500/5">
           <div className="w-10 h-10 bg-blue-50 dark:bg-blue-900/20 rounded-lg flex items-center justify-center mb-3"><BarChart3 className="w-5 h-5 text-blue-600 dark:text-blue-400" /></div>
           <div className="text-2xl font-bold text-gray-900 dark:text-white">{avgProgress}%</div>
           <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">{t('dashboard.avgProgress')}</div>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-5">
+        <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-xl border border-white/20 dark:border-gray-700/50 p-5 shadow-lg shadow-amber-500/5">
           <div className="w-10 h-10 bg-amber-50 dark:bg-amber-900/20 rounded-lg flex items-center justify-center mb-3"><Calendar className="w-5 h-5 text-amber-600 dark:text-amber-400" /></div>
           <div className="text-2xl font-bold text-gray-900 dark:text-white">{bookings.length}</div>
           <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">{t('dashboard.upcomingSessions')}</div>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-5">
+        <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-xl border border-white/20 dark:border-gray-700/50 p-5 shadow-lg shadow-rose-500/5">
           <div className="w-10 h-10 bg-rose-50 dark:bg-rose-900/20 rounded-lg flex items-center justify-center mb-3"><Video className="w-5 h-5 text-rose-600 dark:text-rose-400" /></div>
           <div className="text-2xl font-bold text-gray-900 dark:text-white">{bookings.length}</div>
           <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">{t('dashboard.videoCalls')}</div>
@@ -78,7 +78,7 @@ export default function StudentDashboard() {
         {loading ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">{[1, 2, 3].map(i => <div key={i} className="h-40 bg-gray-100 dark:bg-gray-700 rounded-xl animate-pulse" />)}</div>
         ) : enrolledCourses.length === 0 ? (
-          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-10 text-center">
+          <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-xl border border-white/20 dark:border-gray-700/50 p-10 text-center shadow-lg">
             <BookOpen className="w-10 h-10 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
             <h3 className="font-medium text-gray-600 dark:text-gray-300 mb-1">{t('dashboard.noCourses')}</h3>
             <p className="text-sm text-gray-400 dark:text-gray-500 mb-4">{t('dashboard.noCoursesSub')}</p>
@@ -87,11 +87,11 @@ export default function StudentDashboard() {
             </Link>
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {enrolledCourses.map(course => {
               const en = enrollments.find(e => e.courseId === course.id);
               return (
-                <Link key={course.id} to={`/courses/${course.id}`} className="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow">
+                <Link key={course.id} to={`/courses/${course.id}`} className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-xl border border-white/20 dark:border-gray-700/50 overflow-hidden hover:shadow-lg hover:shadow-violet-500/10 transition-all shadow-lg">
                   <div className="h-28 bg-gradient-to-br from-emerald-50 dark:from-emerald-900/20 to-teal-50 dark:to-teal-900/20 flex items-center justify-center">
                     <BookOpen className="w-8 h-8 text-emerald-300 dark:text-emerald-400/60" />
                   </div>
@@ -116,14 +116,14 @@ export default function StudentDashboard() {
       </div>
 
       <div className="grid md:grid-cols-2 gap-4">
-        <Link to="/schedule" className="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-5 hover:border-emerald-200 dark:hover:border-emerald-700 transition-colors group">
-          <Calendar className="w-8 h-8 text-emerald-600 dark:text-emerald-400 mb-3" />
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-1 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">{t('dashboard.mySchedule')}</h3>
+        <Link to="/schedule" className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-xl border border-white/20 dark:border-gray-700/50 p-5 hover:border-violet-200 dark:hover:border-violet-700 transition-all group shadow-lg shadow-violet-500/5">
+          <Calendar className="w-8 h-8 text-violet-600 dark:text-violet-400 mb-3" />
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-1 group-hover:text-violet-700 dark:group-hover:text-violet-400 transition-colors">{t('dashboard.mySchedule')}</h3>
           <p className="text-sm text-gray-500 dark:text-gray-400">{t('dashboard.myScheduleSub')}</p>
         </Link>
-        <Link to="/video" className="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-5 hover:border-emerald-200 dark:hover:border-emerald-700 transition-colors group">
-          <Video className="w-8 h-8 text-emerald-600 dark:text-emerald-400 mb-3" />
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-1 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">{t('dashboard.videoCallsTitle')}</h3>
+        <Link to="/video" className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-xl border border-white/20 dark:border-gray-700/50 p-5 hover:border-violet-200 dark:hover:border-violet-700 transition-all group shadow-lg shadow-violet-500/5">
+          <Video className="w-8 h-8 text-violet-600 dark:text-violet-400 mb-3" />
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-1 group-hover:text-violet-700 dark:group-hover:text-violet-400 transition-colors">{t('dashboard.videoCallsTitle')}</h3>
           <p className="text-sm text-gray-500 dark:text-gray-400">{t('dashboard.videoCallsSub')}</p>
         </Link>
       </div>

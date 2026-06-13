@@ -29,6 +29,7 @@ export default function CreateCoursePage() {
   const [lessonDuration, setLessonDuration] = useState('');
   const [lessonContentUrl, setLessonContentUrl] = useState('');
   const [lessonText, setLessonText] = useState('');
+  const [lessonVideoFile, setLessonVideoFile] = useState<string | null>(null);
 
   useEffect(() => {
     if (isEdit && id) {
@@ -54,11 +55,18 @@ export default function CreateCoursePage() {
       type: lessonType,
       duration: lessonDuration || '15 min',
       order: lessons.length + 1,
-      contentUrl: lessonType === 'video' ? lessonContentUrl : undefined,
+      contentUrl: lessonType === 'video' ? (lessonVideoFile || lessonContentUrl) : undefined,
       textContent: lessonType === 'text' ? lessonText : undefined,
     };
     setLessons([...lessons, lesson]);
-    setLessonTitle(''); setLessonDesc(''); setLessonDuration(''); setLessonContentUrl(''); setLessonText('');
+    setLessonTitle(''); setLessonDesc(''); setLessonDuration(''); setLessonContentUrl(''); setLessonText(''); setLessonVideoFile(null);
+  }
+
+  function handleLessonVideoUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    setLessonVideoFile(url);
   }
 
   function removeLesson(lid: string) {
@@ -156,7 +164,14 @@ export default function CreateCoursePage() {
             <div className="grid grid-cols-2 gap-3">
               <input type="text" value={lessonDuration} onChange={e => setLessonDuration(e.target.value)} placeholder={t('create.lessonDuration')} className="px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 dark:text-white" />
               {lessonType === 'video' ? (
-                <input type="text" value={lessonContentUrl} onChange={e => setLessonContentUrl(e.target.value)} placeholder={t('create.videoUrl')} className="px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 dark:text-white" />
+                <div className="space-y-2">
+                  <input type="text" value={lessonContentUrl} onChange={e => setLessonContentUrl(e.target.value)} placeholder={t('create.videoUrl')} className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 dark:text-white" />
+                  <label className="flex items-center justify-center gap-2 w-full border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 cursor-pointer hover:border-violet-400 dark:hover:border-violet-500 transition-colors">
+                    <input type="file" accept="video/*" onChange={handleLessonVideoUpload} className="hidden" />
+                    <span className="text-xs text-gray-500 dark:text-gray-400">📁 Загрузить видео с компьютера</span>
+                  </label>
+                  {lessonVideoFile && <p className="text-xs text-green-600 dark:text-green-400">✅ Видео загружено</p>}
+                </div>
               ) : lessonType === 'text' ? (
                 <input type="text" value={lessonText} onChange={e => setLessonText(e.target.value)} placeholder={t('create.textContent')} className="px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 dark:text-white" />
               ) : (
