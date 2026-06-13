@@ -33,12 +33,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  function createProfileObject(uid: string, email: string, displayName: string, photoURL: string | undefined, role: 'student' | 'instructor'): UserProfile {
+  function createProfileObject(uid: string, email: string, displayName: string, photoURL: string | undefined | null, role: 'student' | 'instructor'): UserProfile {
     return {
       uid,
       email,
       displayName: displayName || (role === 'instructor' ? 'Admin' : 'User'),
-      photoURL,
+      photoURL: photoURL || null,
       role,
       createdAt: Date.now(),
     };
@@ -128,7 +128,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       let p = await getUserProfile(cred.user.uid);
       if (!p) {
-        p = createProfileObject(cred.user.uid, cred.user.email || '', 'Admin', undefined, 'instructor');
+        p = createProfileObject(cred.user.uid, cred.user.email || '', 'Admin', null, 'instructor');
         await createUserProfile(p);
         setProfile(p);
       } else {

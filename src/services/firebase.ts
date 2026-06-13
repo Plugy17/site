@@ -14,7 +14,14 @@ import type { UserProfile, Course, Enrollment, ScheduleSlot } from '../types';
 
 export async function createUserProfile(profile: Omit<UserProfile, 'createdAt'>) {
   const userRef = ref(db, `users/${profile.uid}`);
-  await set(userRef, { ...profile, createdAt: Date.now() });
+  // Убираем undefined поля — Firebase не принимает undefined
+  const cleanProfile: Record<string, any> = { ...profile, createdAt: Date.now() };
+  Object.keys(cleanProfile).forEach(key => {
+    if (cleanProfile[key] === undefined) {
+      delete cleanProfile[key];
+    }
+  });
+  await set(userRef, cleanProfile);
 }
 
 export async function getUserProfile(uid: string): Promise<UserProfile | null> {
@@ -25,7 +32,14 @@ export async function getUserProfile(uid: string): Promise<UserProfile | null> {
 
 export async function updateUserProfile(uid: string, data: Partial<UserProfile>) {
   const userRef = ref(db, `users/${uid}`);
-  await update(userRef, { ...data, updatedAt: Date.now() });
+  // Убираем undefined поля
+  const cleanData: Record<string, any> = { ...data, updatedAt: Date.now() };
+  Object.keys(cleanData).forEach(key => {
+    if (cleanData[key] === undefined) {
+      delete cleanData[key];
+    }
+  });
+  await update(userRef, cleanData);
 }
 
 export async function createCourse(course: Omit<Course, 'id' | 'createdAt' | 'updatedAt' | 'rating' | 'ratingCount' | 'enrolledStudents'>) {
