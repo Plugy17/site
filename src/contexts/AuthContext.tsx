@@ -112,9 +112,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (loginErr.code === 'auth/user-not-found') {
           cred = await createUserWithEmailAndPassword(auth, email, password);
         } else if (loginErr.code === 'auth/invalid-credential' || loginErr.code === 'auth/wrong-password') {
-          return { success: false, error: 'Неверный пароль. Если вы входили через Google — удалите пользователя в Firebase Console: Authentication → Users → admin@cyberacademy.com → Delete, затем попробуйте снова.' };
-        } else if (loginErr.code === 'auth/email-already-in-use') {
-          return { success: false, error: 'Этот email уже используется другим способом входа. Удалите пользователя в Firebase Console и попробуйте снова.' };
+          // Пользователь существует, но с другим паролем — пробуем создать заново (если email занят Google, покажем понятную ошибку)
+          try {
+            cred = await createUserWithEmailAndPassword(auth, email, password);
+          } catch (createErr: any) {
+            if (createErr.code === 'auth/email-already-in-use') {
+              return { success: false, error: 'Email admin@cyberacademy.com занят. Войдите через Google с этим email или удалите его в Firebase Console: Authentication → Users → найдите пользователя → Delete.' };
+            }
+            throw createErr;
+          }
         } else {
           throw loginErr;
         }
