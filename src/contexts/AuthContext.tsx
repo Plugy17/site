@@ -6,7 +6,6 @@ import {
   getRedirectResult,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  deleteUser,
   signOut as firebaseSignOut,
   type User,
 } from 'firebase/auth';
@@ -38,22 +37,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return {
       uid,
       email,
-      displayName,
+      displayName: displayName || (role === 'instructor' ? 'Admin' : 'User'),
       photoURL,
       role,
       createdAt: Date.now(),
     };
   }
 
+  async function handleUserProfile(firebaseUser: User, defaultRole: 'student' | 'instructor' = 'student') {
+    let p = await getUserProfile(firebaseUser.uid);
+    if (!p) {
+      p = createProfileObject(firebaseUser.uid, firebaseUser.email || '', firebaseUser.displayName || 'User', firebaseUser.photoURL || undefined, defaultRole);
+      await createUserProfile(p);
+    }
+    return p;
+  }
+
   useEffect(() => {
-    // Обработка результата редиректа (если пользователь был перенаправлен с Google)
     getRedirectResult(auth).then(async (result) => {
       if (result?.user) {
-        let p = await getUserProfile(result.user.uid);
-        if (!p) {
-          p = createProfileObject(result.user.uid, result.user.email || '', result.user.displayName || 'User', result.user.photoURL || undefined, 'student');
-          await createUserProfile(p);
-        }
+        const isAdmin = result.user.email === ADMIN_EMAIL;
+        const p = await handleUserProfile(result.user, isAdmin ? 'instructor' : 'student');
         setProfile(p);
       }
     }).catch((err) => {
@@ -63,12 +67,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
       setUser(firebaseUser);
       if (firebaseUser) {
-        let p = await getUserProfile(firebaseUser.uid);
-        if (!p) {
-          const isAdmin = firebaseUser.email === ADMIN_EMAIL;
-          p = createProfileObject(firebaseUser.uid, firebaseUser.email || '', firebaseUser.displayName || (isAdmin ? 'Admin' : 'User'), firebaseUser.photoURL || undefined, isAdmin ? 'instructor' : 'student');
-          await createUserProfile(p);
-        }
+        const isAdmin = firebaseUser.email === ADMIN_EMAIL;
+        const p = await handleUserProfile(firebaseUser, isAdmin ? 'instructor' : 'student');
         setProfile(p);
       } else {
         setProfile(null);
@@ -83,10 +83,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const result = await signInWithPopup(auth, provider);
       return result;
     } catch (err: any) {
-      // Если popup заблокирован браузером (Safari iOS) — используем редирект
       if (err.code === 'auth/popup-blocked' || err.code === 'auth/popup-closed-by-user') {
         await signInWithRedirect(auth, provider);
-        return null; // Редирект, результата здесь не будет
+        return null;
       }
       throw err;
     }
@@ -94,16 +93,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function signInWithGoogle() {
     const result = await authWithPopup(googleProvider);
-    if (!result) return; // redirect mode — результат обработает onAuthStateChanged
+    if (!result) return;
 
-    let p = await getUserProfile(result.user.uid);
-    if (!p) {
-      p = createProfileObject(result.user.uid, result.user.email || '', result.user.displayName || 'User', result.user.photoURL || undefined, 'student');
-      await createUserProfile(p);
-      setProfile(p);
-    } else {
-      setProfile(p);
-    }
+    const isAdmin = result.user.email === ADMIN_EMAIL;
+    const p = await handleUserProfile(result.user, isAdmin ? 'instructor' : 'student');
+    setProfile(p);
   }
 
   async function signInAsAdmin(email: string, password: string): Promise<{ success: boolean; error?: string }> {
@@ -111,31 +105,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return { success: false, error: 'Invalid admin credentials' };
     }
     try {
-      // Сначала пробуем войти
       let cred;
       try {
         cred = await signInWithEmailAndPassword(auth, email, password);
       } catch (loginErr: any) {
-        // Если пользователь не найден — создаём
         if (loginErr.code === 'auth/user-not-found') {
           cred = await createUserWithEmailAndPassword(auth, email, password);
-        } else if (loginErr.code === 'auth/operation-not-allowed') {
-          return { success: false, error: 'Вход по Email/Пароль не включён в Firebase Console. Зайдите в Authentication → Sign-in providers → Email/Password → Enable.' };
-        } else if (loginErr.code === 'auth/invalid-credential') {
-          // Пользователь существует, но пароль неверный — удаляем и создаём заново
-          // Сначала логинимся любым способом чтобы получить uid (временно входим)
-          try {
-            // Пробуем новый пароль
-            await createUserWithEmailAndPassword(auth, email, password);
-            // Не должно сработать, если email занят, но ловим ошибку ниже
-          } catch (createErr: any) {
-            if (createErr.code === 'auth/email-already-in-use') {
-              return { success: false, error: 'Admin уже существует в Firebase с другим паролем. Удали пользователя admin@cyberacademy.com вручную: Firebase Console → Authentication → Users → удалить пользователя. После этого попробуй снова.' };
-            }
-            throw createErr;
-          }
-          // Если createUserWithEmailAndPassword не выбросил ошибку — значит создали
-          cred = await signInWithEmailAndPassword(auth, email, password);
+        } else if (loginErr.code === 'auth/invalid-credential' || loginErr.code === 'auth/wrong-password') {
+          return { success: false, error: 'Неверный пароль. Если вы входили через Google — удалите пользователя в Firebase Console: Authentication → Users → admin@cyberacademy.com → Delete, затем попробуйте снова.' };
+        } else if (loginErr.code === 'auth/email-already-in-use') {
+          return { success: false, error: 'Этот email уже используется другим способом входа. Удалите пользователя в Firebase Console и попробуйте снова.' };
         } else {
           throw loginErr;
         }

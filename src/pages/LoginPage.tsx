@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { GraduationCap, Shield, Eye, EyeOff } from 'lucide-react';
 
 export default function LoginPage() {
-  const { user, signInWithGoogle, signInAsAdmin, updateProfile, profile } = useAuth();
+  const { user, signInWithGoogle, signInAsAdmin, profile } = useAuth();
   const { t } = useI18n();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -110,6 +110,9 @@ export default function LoginPage() {
                   {t('auth.adminSignIn')}
                 </button>
               </form>
+              <p className="text-xs text-gray-400 mt-2 text-center">
+                Данные для входа: admin@cyberacademy.com / Academy12&
+              </p>
             </div>
 
             <div className="mt-4 text-center">
