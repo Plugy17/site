@@ -35,7 +35,7 @@ export default function Header() {
                 </svg>
               </div>
             </div>
-            <span className="text-xl font-bold text-gray-900 dark:text-white">NovaShield Academy</span>
+            <span className="text-xl font-bold text-gray-900 dark:text-white">{t('site.name')}</span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-6">
