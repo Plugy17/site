@@ -1,3 +1,4 @@
+import { lazy } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -16,6 +17,7 @@ import ProfilePage from './pages/ProfilePage';
 import InstructorSchedulePage from './pages/InstructorSchedulePage';
 import AIAssistant from './pages/AIAssistantPage';
 import CreateInstructorPage from './pages/CreateInstructorPage';
+import SeedDataPage from './pages/SeedDataPage';
 
 function App() {
   return (
@@ -38,6 +40,7 @@ function App() {
                 <Route path="/video" element={<VideoCallPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/instructor/create-instructor" element={<CreateInstructorPage />} />
+                <Route path="/seed" element={<SeedDataPage />} />
               </Route>
             </Routes>
             <AIAssistant />
