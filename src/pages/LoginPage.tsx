@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useI18n } from '../i18n';
 import { useNavigate } from 'react-router-dom';
-import { GraduationCap, Shield, Eye, EyeOff } from 'lucide-react';
+import { Shield, Eye, EyeOff } from 'lucide-react';
 
 export default function LoginPage() {
   const { user, signInWithGoogle, signInAsAdmin, profile } = useAuth();
@@ -58,8 +58,13 @@ export default function LoginPage() {
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-gray-50 dark:bg-gray-950 px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="w-14 h-14 bg-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <GraduationCap className="w-8 h-8 text-white" />
+          <div className="relative mx-auto mb-4 w-16 h-16">
+            <div className="absolute inset-0 bg-gradient-to-br from-violet-600 to-fuchsia-600 rounded-2xl animate-pulse blur-sm opacity-70" />
+            <div className="relative w-16 h-16 bg-gradient-to-br from-violet-600 to-fuchsia-600 rounded-2xl flex items-center justify-center">
+              <svg className="w-9 h-9 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+              </svg>
+            </div>
           </div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('auth.welcome')}</h1>
           <p className="text-gray-500 dark:text-gray-400 mt-2">{t('auth.signInSub')}</p>
@@ -86,33 +91,30 @@ export default function LoginPage() {
               <div className="flex-1 border-t border-gray-200 dark:border-gray-700" />
             </div>
 
-            {/* Admin login */}
+            {/* Admin login - only visible to admins */}
             <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
               <div className="flex items-center gap-2 mb-3">
-                <Shield className="w-4 h-4 text-emerald-600" />
+                <Shield className="w-4 h-4 text-violet-600" />
                 <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">{t('auth.adminLogin')}</span>
               </div>
               <form onSubmit={handleAdminLogin} className="space-y-3">
                 <div>
                   <input type="email" value={adminEmail} onChange={e => setAdminEmail(e.target.value)} placeholder={t('auth.adminEmail')} required
-                    className="w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                    className="w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500" />
                 </div>
                 <div className="relative">
                   <input type={showPassword ? 'text' : 'password'} value={adminPassword} onChange={e => setAdminPassword(e.target.value)} placeholder={t('auth.adminPassword')} required
-                    className="w-full px-4 py-2.5 pr-10 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                    className="w-full px-4 py-2.5 pr-10 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500" />
                   <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
                 {adminError && <p className="text-xs text-red-500">{adminError}</p>}
                 <button type="submit" disabled={loading}
-                  className="w-full bg-emerald-600 text-white py-2.5 rounded-xl text-sm font-semibold hover:bg-emerald-700 transition-colors disabled:opacity-50">
+                  className="w-full bg-violet-600 text-white py-2.5 rounded-xl text-sm font-semibold hover:bg-violet-700 transition-colors disabled:opacity-50">
                   {t('auth.adminSignIn')}
                 </button>
               </form>
-              <p className="text-xs text-gray-400 mt-2 text-center">
-                Данные для входа: admin@cyberacademy.com / Academy12&
-              </p>
             </div>
 
             <div className="mt-4 text-center">
