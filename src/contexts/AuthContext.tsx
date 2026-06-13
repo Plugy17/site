@@ -118,6 +118,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // Если пользователь не найден — создаём
         if (loginErr.code === 'auth/user-not-found') {
           cred = await createUserWithEmailAndPassword(auth, email, password);
+        } else if (loginErr.code === 'auth/operation-not-allowed') {
+          return { success: false, error: 'Вход по Email/Пароль не включён в Firebase Console. Зайдите в Authentication → Sign-in providers → Email/Password → Enable.' };
         } else {
           throw loginErr;
         }
