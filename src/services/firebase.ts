@@ -1,140 +1,158 @@
 import {
-  doc,
-  setDoc,
-  getDoc,
-  updateDoc,
-  collection,
-  getDocs,
-  addDoc,
+  ref,
+  set,
+  get,
+  update,
+  remove,
+  push,
   query,
-  where,
-  orderBy,
-  deleteDoc,
-  serverTimestamp,
-} from 'firebase/firestore';
+  orderByChild,
+  equalTo,
+} from 'firebase/database';
 import { db } from '../config/firebase';
 import type { UserProfile, Course, Enrollment, ScheduleSlot } from '../types';
 
-function withTimestamps<T extends Record<string, unknown>>(data: T, isNew: boolean) {
-  const ts = serverTimestamp();
-  return { ...data, [isNew ? 'createdAt' : 'updatedAt']: ts };
-}
-
 export async function createUserProfile(profile: Omit<UserProfile, 'createdAt'>) {
-  const ref = doc(db, 'users', profile.uid);
-  await setDoc(ref, withTimestamps({ ...profile }, true));
+  const userRef = ref(db, `users/${profile.uid}`);
+  await set(userRef, { ...profile, createdAt: Date.now() });
 }
 
 export async function getUserProfile(uid: string): Promise<UserProfile | null> {
-  const ref = doc(db, 'users', uid);
-  const snap = await getDoc(ref);
-  return snap.exists() ? (snap.data() as UserProfile) : null;
+  const userRef = ref(db, `users/${uid}`);
+  const snapshot = await get(userRef);
+  return snapshot.exists() ? (snapshot.val() as UserProfile) : null;
 }
 
 export async function updateUserProfile(uid: string, data: Partial<UserProfile>) {
-  const ref = doc(db, 'users', uid);
-  await updateDoc(ref, withTimestamps(data, false));
+  const userRef = ref(db, `users/${uid}`);
+  await update(userRef, { ...data, updatedAt: Date.now() });
 }
 
 export async function createCourse(course: Omit<Course, 'id' | 'createdAt' | 'updatedAt' | 'rating' | 'ratingCount' | 'enrolledStudents'>) {
-  const ref = collection(db, 'courses');
-  const docRef = await addDoc(ref, withTimestamps({
+  const coursesRef = ref(db, 'courses');
+  const newRef = push(coursesRef);
+  const id = newRef.key!;
+  const courseData = {
     ...course,
+    id,
     enrolledStudents: [],
     rating: 0,
     ratingCount: 0,
-  }, true));
-  return docRef.id;
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+  };
+  await set(newRef, courseData);
+  return id;
 }
 
 export async function getCourse(id: string): Promise<Course | null> {
-  const ref = doc(db, 'courses', id);
-  const snap = await getDoc(ref);
-  return snap.exists() ? { id: snap.id, ...snap.data() } as Course : null;
+  const courseRef = ref(db, `courses/${id}`);
+  const snapshot = await get(courseRef);
+  return snapshot.exists() ? (snapshot.val() as Course) : null;
 }
 
 export async function getAllCourses(): Promise<Course[]> {
-  const ref = collection(db, 'courses');
-  const snap = await getDocs(ref);
-  return snap.docs.map(d => ({ id: d.id, ...d.data() } as Course));
+  const coursesRef = ref(db, 'courses');
+  const snapshot = await get(coursesRef);
+  if (!snapshot.exists()) return [];
+  const data = snapshot.val() as Record<string, Course>;
+  return Object.values(data);
 }
 
 export async function getCoursesByInstructor(instructorId: string): Promise<Course[]> {
-  const q = query(collection(db, 'courses'), where('instructorId', '==', instructorId));
-  const snap = await getDocs(q);
-  return snap.docs.map(d => ({ id: d.id, ...d.data() } as Course));
+  const coursesRef = ref(db, 'courses');
+  const q = query(coursesRef, orderByChild('instructorId'), equalTo(instructorId));
+  const snapshot = await get(q);
+  if (!snapshot.exists()) return [];
+  const data = snapshot.val() as Record<string, Course>;
+  return Object.values(data);
 }
 
 export async function updateCourse(id: string, data: Partial<Course>) {
-  const ref = doc(db, 'courses', id);
-  await updateDoc(ref, withTimestamps(data, false));
+  const courseRef = ref(db, `courses/${id}`);
+  await update(courseRef, { ...data, updatedAt: Date.now() });
 }
 
 export async function deleteCourse(id: string) {
-  const ref = doc(db, 'courses', id);
-  await deleteDoc(ref);
+  const courseRef = ref(db, `courses/${id}`);
+  await remove(courseRef);
 }
 
 export async function enrollStudent(courseId: string, studentId: string, courseTitle: string) {
-  const courseRef = doc(db, 'courses', courseId);
-  const courseSnap = await getDoc(courseRef);
+  const courseRef = ref(db, `courses/${courseId}`);
+  const courseSnap = await get(courseRef);
   if (!courseSnap.exists()) throw new Error('Course not found');
 
-  const enrolled = courseSnap.data().enrolledStudents || [];
+  const courseData = courseSnap.val() as Course;
+  const enrolled = courseData.enrolledStudents || [];
   if (enrolled.includes(studentId)) throw new Error('Already enrolled');
 
-  await updateDoc(courseRef, { enrolledStudents: [...enrolled, studentId] });
+  await update(courseRef, { enrolledStudents: [...enrolled, studentId] });
 
-  const enrollmentRef = collection(db, 'enrollments');
-  await addDoc(enrollmentRef, withTimestamps({
+  const enrollmentsRef = ref(db, 'enrollments');
+  const newEnrollmentRef = push(enrollmentsRef);
+  await set(newEnrollmentRef, {
     studentId,
     courseId,
     courseTitle,
     progress: 0,
     completedLessons: [],
-  }, true));
+    id: newEnrollmentRef.key,
+    enrolledAt: Date.now(),
+  });
 }
 
 export async function getEnrollments(studentId: string): Promise<Enrollment[]> {
-  const q = query(collection(db, 'enrollments'), where('studentId', '==', studentId));
-  const snap = await getDocs(q);
-  return snap.docs.map(d => ({ id: d.id, ...d.data() } as Enrollment));
+  const enrollmentsRef = ref(db, 'enrollments');
+  const q = query(enrollmentsRef, orderByChild('studentId'), equalTo(studentId));
+  const snapshot = await get(q);
+  if (!snapshot.exists()) return [];
+  const data = snapshot.val() as Record<string, Enrollment>;
+  return Object.values(data);
 }
 
 export async function updateEnrollmentProgress(enrollmentId: string, completedLessons: string[], progress: number) {
-  const ref = doc(db, 'enrollments', enrollmentId);
-  await updateDoc(ref, { completedLessons, progress });
+  const enrollmentRef = ref(db, `enrollments/${enrollmentId}`);
+  await update(enrollmentRef, { completedLessons, progress });
 }
 
 export async function createScheduleSlot(slot: Omit<ScheduleSlot, 'id'>) {
-  const ref = collection(db, 'schedule');
-  const docRef = await addDoc(ref, slot);
-  return docRef.id;
+  const scheduleRef = ref(db, 'schedule');
+  const newRef = push(scheduleRef);
+  const id = newRef.key!;
+  await set(newRef, { ...slot, id });
+  return id;
 }
 
 export async function getScheduleSlots(instructorId: string): Promise<ScheduleSlot[]> {
-  const q = query(collection(db, 'schedule'), where('instructorId', '==', instructorId), orderBy('startTime'));
-  const snap = await getDocs(q);
-  return snap.docs.map(d => ({ id: d.id, ...d.data() } as ScheduleSlot));
+  const scheduleRef = ref(db, 'schedule');
+  const q = query(scheduleRef, orderByChild('instructorId'), equalTo(instructorId));
+  const snapshot = await get(q);
+  if (!snapshot.exists()) return [];
+  const data = snapshot.val() as Record<string, ScheduleSlot>;
+  return Object.values(data).sort((a, b) => (a.startTime || '').localeCompare(b.startTime || ''));
 }
 
 export async function getStudentBookings(studentId: string): Promise<ScheduleSlot[]> {
-  const q = query(collection(db, 'schedule'), where('studentId', '==', studentId), orderBy('startTime'));
-  const snap = await getDocs(q);
-  return snap.docs.map(d => ({ id: d.id, ...d.data() } as ScheduleSlot));
+  const scheduleRef = ref(db, 'schedule');
+  const q = query(scheduleRef, orderByChild('studentId'), equalTo(studentId));
+  const snapshot = await get(q);
+  if (!snapshot.exists()) return [];
+  const data = snapshot.val() as Record<string, ScheduleSlot>;
+  return Object.values(data).sort((a, b) => (a.startTime || '').localeCompare(b.startTime || ''));
 }
 
 export async function bookSlot(slotId: string, studentId: string, studentName: string) {
-  const ref = doc(db, 'schedule', slotId);
-  await updateDoc(ref, { studentId, studentName, status: 'booked' });
+  const slotRef = ref(db, `schedule/${slotId}`);
+  await update(slotRef, { studentId, studentName, status: 'booked' });
 }
 
 export async function cancelSlot(slotId: string) {
-  const ref = doc(db, 'schedule', slotId);
-  await updateDoc(ref, { studentId: null, studentName: null, status: 'available' });
+  const slotRef = ref(db, `schedule/${slotId}`);
+  await update(slotRef, { studentId: null, studentName: null, status: 'available' });
 }
 
 export async function deleteSlot(slotId: string) {
-  const ref = doc(db, 'schedule', slotId);
-  await deleteDoc(ref);
+  const slotRef = ref(db, `schedule/${slotId}`);
+  await remove(slotRef);
 }
