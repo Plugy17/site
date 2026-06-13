@@ -42,9 +42,9 @@ export default function InstructorSchedulePage() {
         instructorId: user.uid, courseId: courseId || '', courseTitle: course?.title || t('instructorSchedule.openConsultation'),
         startTime, endTime: endDate.toISOString(), type: slotType, status: 'available',
       });
-      setShowAdd(false); setDate(''); setTime(''); setCourseId('');
+      setShowAdd(false); setDate(''); setTime(''); setCourseId(''); setSlotType('lesson');
       await loadData();
-    } catch (err) { console.error(err); }
+    } catch (err) { console.error('Schedule slot creation failed:', err); alert('Ошибка создания слота. Попробуйте ещё раз.'); }
   }
 
   async function handleDelete(id: string) {
@@ -64,7 +64,7 @@ export default function InstructorSchedulePage() {
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('instructorSchedule.title')}</h1>
           <p className="text-gray-500 dark:text-gray-400 mt-1">{t('instructorSchedule.subtitle')}</p>
         </div>
-        <button onClick={() => setShowAdd(!showAdd)} className="flex items-center gap-2 bg-emerald-600 dark:bg-emerald-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-emerald-700 dark:hover:bg-emerald-700 transition-colors">
+        <button onClick={() => { setShowAdd(!showAdd); if (!showAdd) { setDate(new Date().toISOString().split('T')[0]); setTime('10:00'); } }} className="flex items-center gap-2 bg-violet-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-violet-700 transition-colors">
           <Plus className="w-4 h-4" /> {t('instructorSchedule.addSlot')}
         </button>
       </div>

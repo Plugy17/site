@@ -54,6 +54,7 @@ export default function CourseDetailPage() {
     try {
       await enrollStudent(course.id, user.uid, course.title);
       await loadCourse();
+      alert('Вы успешно записались на курс!');
     } catch (err: any) { alert(err.message || 'Failed to enroll'); }
     setEnrolling(false);
   }

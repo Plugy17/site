@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useI18n } from '../i18n';
 import { createUserProfile } from '../services/firebase';
-import { auth } from '../config/firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { ArrowLeft, UserPlus, Shield } from 'lucide-react';
+import { ref, push } from 'firebase/database';
+import { db } from '../config/firebase';
+import { ArrowLeft, UserPlus } from 'lucide-react';
 
 export default function CreateInstructorPage() {
-  const { profile } = useAuth();
+  const { user, profile } = useAuth();
   const { t } = useI18n();
   const navigate = useNavigate();
   const [name, setName] = useState('');
@@ -18,7 +18,7 @@ export default function CreateInstructorPage() {
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
 
-  if (profile?.role !== 'instructor') { navigate('/dashboard'); return null; }
+  if (!user || profile?.role !== 'instructor') { navigate('/dashboard'); return null; }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -26,24 +26,24 @@ export default function CreateInstructorPage() {
     setSuccess('');
     setLoading(true);
     try {
-      const cred = await createUserWithEmailAndPassword(auth, email, password);
+      // Generate a unique ID for the new instructor
+      const instructorsRef = ref(db, 'instructors');
+      const newRef = push(instructorsRef);
+      const newId = newRef.key!;
+
+      // Save instructor profile to database
       await createUserProfile({
-        uid: cred.user.uid,
+        uid: newId,
         email: email,
         displayName: name,
-        photoURL: null,
+        photoURL: undefined,
         role: 'instructor',
       });
-      setSuccess(`Преподаватель "${name}" успешно создан! Email: ${email}`);
+
+      setSuccess(`Преподаватель "${name}" успешно создан!\nEmail: ${email}\nПароль: ${password}\n\nДля входа используйте Google Sign-In или создайте аккаунт в Firebase Console.`);
       setName(''); setEmail(''); setPassword('');
     } catch (err: any) {
-      if (err.code === 'auth/email-already-in-use') {
-        setError('Этот email уже используется');
-      } else if (err.code === 'auth/weak-password') {
-        setError('Пароль должен быть минимум 6 символов');
-      } else {
-        setError(err.message || 'Ошибка создания преподавателя');
-      }
+      setError(err.message || 'Ошибка создания преподавателя');
     }
     setLoading(false);
   }
@@ -64,8 +64,8 @@ export default function CreateInstructorPage() {
       )}
 
       {success && (
-        <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-3 mb-4">
-          <p className="text-sm text-green-600 dark:text-green-400">{success}</p>
+        <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-4 mb-4">
+          <p className="text-sm text-green-600 dark:text-green-400 whitespace-pre-line">{success}</p>
         </div>
       )}
 

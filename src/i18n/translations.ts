@@ -2,7 +2,7 @@ export type Lang = 'en' | 'ru' | 'uk';
 
 export const translations: Record<Lang, Record<string, string>> = {
   en: {
-    'site.name': 'NovaShield Academy',
+    'site.name': 'Cyber Academy',
 
     'nav.courses': 'Courses',
     'nav.dashboard': 'Dashboard',
@@ -14,8 +14,8 @@ export const translations: Record<Lang, Record<string, string>> = {
     'nav.theme': 'Theme',
 
     'landing.badge': 'New platform — Start learning today',
-    'landing.title1': 'Master Cybersecurity,',
-    'landing.title2': 'Protect the Future',
+    'landing.title1': 'Learn skills that',
+    'landing.title2': 'shape your future',
     'landing.subtitle': 'Join live courses with video sessions, flexible scheduling, and an AI assistant to guide you every step of the way.',
     'landing.browseCourses': 'Browse Courses',
     'landing.becomeInstructor': 'Become an Instructor',
@@ -30,10 +30,10 @@ export const translations: Record<Lang, Record<string, string>> = {
     'landing.feature4Title': 'AI Study Assistant',
     'landing.feature4Desc': 'Get instant help and explanations from your personal AI tutor',
     'landing.ctaTitle': 'Ready to start learning?',
-    'landing.ctaSub': 'Join students already building their future with NovaShield Academy.',
+    'landing.ctaSub': 'Join students already building their future with Cyber Academy.',
     'landing.exploreAll': 'Explore All Courses',
 
-    'auth.welcome': 'Welcome to NovaShield Academy',
+    'auth.welcome': 'Welcome to Cyber Academy',
     'auth.signInSub': 'Sign in to access your courses and dashboard',
     'auth.google': 'Continue with Google',
     'auth.terms': 'By signing in, you agree to our Terms of Service and Privacy Policy',
@@ -175,7 +175,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     'profile.themeSettings': 'Theme Settings',
     'profile.accentColor': 'Accent Color',
 
-    'ai.greeting': "Hi! I'm your NovaShield Academy AI assistant. I can help you find courses, understand how things work, and answer questions about the platform. What can I help you with?",
+    'ai.greeting': "Hi! I'm your Cyber Academy AI assistant. I can help you find courses, understand how things work, and answer questions about the platform. What can I help you with?",
     'ai.placeholder': 'Ask me anything...',
     'ai.title': 'AI Assistant',
     'ai.status': 'Always ready to help',
@@ -205,7 +205,7 @@ export const translations: Record<Lang, Record<string, string>> = {
   },
 
   ru: {
-    'site.name': 'NovaShield Academy',
+    'site.name': 'Cyber Academy',
 
     'nav.courses': 'Курсы',
     'nav.dashboard': 'Кабинет',
@@ -217,8 +217,8 @@ export const translations: Record<Lang, Record<string, string>> = {
     'nav.theme': 'Тема',
 
     'landing.badge': 'Новая платформа — Начните обучение сегодня',
-    'landing.title1': 'Освойте кибербезопасность,',
-    'landing.title2': 'защитите будущее',
+    'landing.title1': 'Учитесь навыкам,',
+    'landing.title2': 'которые формируют будущее',
     'landing.subtitle': 'Присоединяйтесь к живым курсам с видеосессиями, гибким расписанием и ИИ-помощником.',
     'landing.browseCourses': 'Смотреть курсы',
     'landing.becomeInstructor': 'Стать преподавателем',
@@ -233,10 +233,10 @@ export const translations: Record<Lang, Record<string, string>> = {
     'landing.feature4Title': 'ИИ-помощник',
     'landing.feature4Desc': 'Получайте мгновенную помощь и объяснения от личного ИИ-тьютора',
     'landing.ctaTitle': 'Готовы начать обучение?',
-    'landing.ctaSub': 'Присоединяйтесь к студентам, которые уже строят своё будущее с NovaShield Academy.',
+    'landing.ctaSub': 'Присоединяйтесь к студентам, которые уже строят своё будущее с Cyber Academy.',
     'landing.exploreAll': 'Все курсы',
 
-    'auth.welcome': 'Добро пожаловать в NovaShield Academy',
+    'auth.welcome': 'Добро пожаловать в Cyber Academy',
     'auth.signInSub': 'Войдите, чтобы получить доступ к курсам и кабинету',
     'auth.google': 'Войти через Google',
     'auth.terms': 'Входя в систему, вы соглашаетесь с Условиями использования и Политикой конфиденциальности',
@@ -378,7 +378,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     'profile.themeSettings': 'Настройки темы',
     'profile.accentColor': 'Акцентный цвет',
 
-    'ai.greeting': 'Привет! Я ваш ИИ-помощник NovaShield Academy. Могу помочь найти курсы, разобраться в работе платформы и ответить на вопросы. Чем могу помочь?',
+    'ai.greeting': 'Привет! Я ваш ИИ-помощник Cyber Academy. Могу помочь найти курсы, разобраться в работе платформы и ответить на вопросы. Чем могу помочь?',
     'ai.placeholder': 'Задайте вопрос...',
     'ai.title': 'ИИ-помощник',
     'ai.status': 'Всегда готов помочь',
@@ -404,7 +404,7 @@ export const translations: Record<Lang, Record<string, string>> = {
   },
 
   uk: {
-    'site.name': 'NovaShield Academy',
+    'site.name': 'Cyber Academy',
 
     'nav.courses': 'Курси',
     'nav.dashboard': 'Кабінет',
@@ -416,8 +416,8 @@ export const translations: Record<Lang, Record<string, string>> = {
     'nav.theme': 'Тема',
 
     'landing.badge': 'Нова платформа — Почніть навчання сьогодні',
-    'landing.title1': 'Опануйте кібербезпеку,',
-    'landing.title2': 'захистіть майбутнє',
+    'landing.title1': 'Навчайтесь навичкам,',
+    'landing.title2': 'які формують майбутнє',
     'landing.subtitle': 'Приєднуйтесь до живих курсів з відеосесіями, гнучким розкладом та ІІ-помічником.',
     'landing.browseCourses': 'Переглянути курси',
     'landing.becomeInstructor': 'Стати викладачем',
@@ -432,10 +432,10 @@ export const translations: Record<Lang, Record<string, string>> = {
     'landing.feature4Title': 'ІІ-помічник',
     'landing.feature4Desc': 'Отримуйте миттєву допомогу та пояснення від особистого ІІ-тьютора',
     'landing.ctaTitle': 'Готові почати навчання?',
-    'landing.ctaSub': 'Приєднуйтесь до студентів, які вже будують своє майбутнє з NovaShield Academy.',
+    'landing.ctaSub': 'Приєднуйтесь до студентів, які вже будують своє майбутнє з Cyber Academy.',
     'landing.exploreAll': 'Усі курси',
 
-    'auth.welcome': 'Ласкаво просимо до NovaShield Academy',
+    'auth.welcome': 'Ласкаво просимо до Cyber Academy',
     'auth.signInSub': 'Увійдіть, щоб отримати доступ до курсів та кабінету',
     'auth.google': 'Увійти через Google',
     'auth.terms': 'Увійшовши в систему, ви погоджуєтесь з Умовами використання',
@@ -577,7 +577,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     'profile.themeSettings': 'Налаштування теми',
     'profile.accentColor': 'Акцентний колір',
 
-    'ai.greeting': 'Привіт! Я ваш ІІ-помічник NovaShield Academy. Можу допомогти знайти курси, розібратись у роботі платформи та відповісти на питання. Чим можу допомогти?',
+    'ai.greeting': 'Привіт! Я ваш ІІ-помічник Cyber Academy. Можу допомогти знайти курси, розібратись у роботі платформи та відповісти на питання. Чим можу допомогти?',
     'ai.placeholder': 'Задайте питання...',
     'ai.title': 'ІІ-помічник',
     'ai.status': 'Завжди готовий допомогти',
