@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useI18n } from '../i18n';
 import { getCoursesByInstructor, getScheduleSlots, deleteCourse } from '../services/firebase';
 import type { Course, ScheduleSlot } from '../types';
-import { BookOpen, Plus, Calendar, Users, Trash2, Edit, BarChart3 } from 'lucide-react';
+import { BookOpen, Plus, Calendar, Users, Trash2, Edit, BarChart3, UserPlus } from 'lucide-react';
 
 export default function InstructorDashboard() {
   const { user, profile } = useAuth();
@@ -54,7 +54,7 @@ export default function InstructorDashboard() {
           <Link to="/instructor/schedule" className="flex items-center gap-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-4 py-2 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
             <Calendar className="w-4 h-4" /> {t('instructor.manageSchedule')}
           </Link>
-          <Link to="/instructor/create" className="flex items-center gap-2 bg-emerald-600 dark:bg-emerald-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-emerald-700 dark:hover:bg-emerald-700 transition-colors">
+          <Link to="/instructor/create" className="flex items-center gap-2 bg-violet-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-violet-700 transition-colors">
             <Plus className="w-4 h-4" /> {t('instructor.newCourse')}
           </Link>
         </div>
@@ -133,7 +133,7 @@ export default function InstructorDashboard() {
                   <div className="font-medium text-gray-900 dark:text-white text-sm">{slot.courseTitle}</div>
                   <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{t('common.with')} {slot.studentName} &middot; {new Date(slot.startTime).toLocaleString()}</div>
                 </div>
-                <Link to={`/video?room=${slot.id}`} className="text-sm text-emerald-600 dark:text-emerald-400 hover:underline">{t('instructor.joinCall')}</Link>
+                <Link to={`/video?room=${slot.id}`} className="text-sm text-violet-600 dark:text-violet-400 hover:underline">{t('instructor.joinCall')}</Link>
               </div>
             ))}
           </div>
