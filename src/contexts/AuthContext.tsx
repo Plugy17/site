@@ -5,10 +5,11 @@ import {
   signInWithRedirect,
   getRedirectResult,
   signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   signOut as firebaseSignOut,
   type User,
 } from 'firebase/auth';
-import { auth, googleProvider, appleProvider } from '../config/firebase';
+import { auth, googleProvider } from '../config/firebase';
 import { getUserProfile, createUserProfile, updateUserProfile } from '../services/firebase';
 import type { UserProfile } from '../types';
 
@@ -20,7 +21,6 @@ interface AuthContextType {
   profile: UserProfile | null;
   loading: boolean;
   signInWithGoogle: () => Promise<void>;
-  signInWithApple: () => Promise<void>;
   signInAsAdmin: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   signOut: () => Promise<void>;
   updateProfile: (data: Partial<UserProfile>) => Promise<void>;
@@ -33,20 +33,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
+  function createProfileObject(uid: string, email: string, displayName: string, photoURL: string | undefined, role: 'student' | 'instructor'): UserProfile {
+    return {
+      uid,
+      email,
+      displayName,
+      photoURL,
+      role,
+      createdAt: Date.now(),
+    };
+  }
+
   useEffect(() => {
-    // Обработка результата редиректа (если пользователь был перенаправлен с Google/Apple)
+    // Обработка результата редиректа (если пользователь был перенаправлен с Google)
     getRedirectResult(auth).then(async (result) => {
       if (result?.user) {
         let p = await getUserProfile(result.user.uid);
         if (!p) {
-          p = {
-            uid: result.user.uid,
-            email: result.user.email || '',
-            displayName: result.user.displayName || 'User',
-            photoURL: result.user.photoURL || undefined,
-            role: 'student',
-            createdAt: Date.now(),
-          };
+          p = createProfileObject(result.user.uid, result.user.email || '', result.user.displayName || 'User', result.user.photoURL || undefined, 'student');
           await createUserProfile(p);
         }
         setProfile(p);
@@ -61,14 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         let p = await getUserProfile(firebaseUser.uid);
         if (!p) {
           const isAdmin = firebaseUser.email === ADMIN_EMAIL;
-          p = {
-            uid: firebaseUser.uid,
-            email: firebaseUser.email || '',
-            displayName: firebaseUser.displayName || (isAdmin ? 'Admin' : 'User'),
-            photoURL: firebaseUser.photoURL || undefined,
-            role: isAdmin ? 'instructor' : 'student',
-            createdAt: Date.now(),
-          };
+          p = createProfileObject(firebaseUser.uid, firebaseUser.email || '', firebaseUser.displayName || (isAdmin ? 'Admin' : 'User'), firebaseUser.photoURL || undefined, isAdmin ? 'instructor' : 'student');
           await createUserProfile(p);
         }
         setProfile(p);
@@ -100,35 +97,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     let p = await getUserProfile(result.user.uid);
     if (!p) {
-      p = {
-        uid: result.user.uid,
-        email: result.user.email || '',
-        displayName: result.user.displayName || 'User',
-        photoURL: result.user.photoURL || undefined,
-        role: 'student',
-        createdAt: Date.now(),
-      };
-      await createUserProfile(p);
-      setProfile(p);
-    } else {
-      setProfile(p);
-    }
-  }
-
-  async function signInWithApple() {
-    const result = await authWithPopup(appleProvider);
-    if (!result) return; // redirect mode — результат обработает onAuthStateChanged
-
-    let p = await getUserProfile(result.user.uid);
-    if (!p) {
-      p = {
-        uid: result.user.uid,
-        email: result.user.email || '',
-        displayName: result.user.displayName || 'User',
-        photoURL: result.user.photoURL || undefined,
-        role: 'student',
-        createdAt: Date.now(),
-      };
+      p = createProfileObject(result.user.uid, result.user.email || '', result.user.displayName || 'User', result.user.photoURL || undefined, 'student');
       await createUserProfile(p);
       setProfile(p);
     } else {
@@ -141,16 +110,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return { success: false, error: 'Invalid admin credentials' };
     }
     try {
-      const cred = await signInWithEmailAndPassword(auth, email, password);
+      // Сначала пробуем войти
+      let cred;
+      try {
+        cred = await signInWithEmailAndPassword(auth, email, password);
+      } catch (loginErr: any) {
+        // Если пользователь не найден — создаём
+        if (loginErr.code === 'auth/user-not-found') {
+          cred = await createUserWithEmailAndPassword(auth, email, password);
+        } else {
+          throw loginErr;
+        }
+      }
+
       let p = await getUserProfile(cred.user.uid);
       if (!p) {
-        p = {
-          uid: cred.user.uid,
-          email: cred.user.email || '',
-          displayName: 'Admin',
-          role: 'instructor',
-          createdAt: Date.now(),
-        };
+        p = createProfileObject(cred.user.uid, cred.user.email || '', 'Admin', undefined, 'instructor');
         await createUserProfile(p);
         setProfile(p);
       } else {
@@ -179,7 +154,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, profile, loading, signInWithGoogle, signInWithApple, signInAsAdmin, signOut, updateProfile }}>
+    <AuthContext.Provider value={{ user, profile, loading, signInWithGoogle, signInAsAdmin, signOut, updateProfile }}>
       {children}
     </AuthContext.Provider>
   );
