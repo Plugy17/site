@@ -54,6 +54,9 @@ export default function InstructorDashboard() {
           <Link to="/instructor/schedule" className="flex items-center gap-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-4 py-2 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
             <Calendar className="w-4 h-4" /> {t('instructor.manageSchedule')}
           </Link>
+          <Link to="/instructor/create-instructor" className="flex items-center gap-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-4 py-2 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+            <UserPlus className="w-4 h-4" /> {t('instructor.createInstructor')}
+          </Link>
           <Link to="/instructor/create" className="flex items-center gap-2 bg-violet-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-violet-700 transition-colors">
             <Plus className="w-4 h-4" /> {t('instructor.newCourse')}
           </Link>

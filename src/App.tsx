@@ -15,6 +15,7 @@ import VideoCallPage from './pages/VideoCallPage';
 import ProfilePage from './pages/ProfilePage';
 import InstructorSchedulePage from './pages/InstructorSchedulePage';
 import AIAssistant from './pages/AIAssistantPage';
+import CreateInstructorPage from './pages/CreateInstructorPage';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
                 <Route path="/schedule" element={<SchedulePage />} />
                 <Route path="/video" element={<VideoCallPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/instructor/create-instructor" element={<CreateInstructorPage />} />
               </Route>
             </Routes>
             <AIAssistant />
