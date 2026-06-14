@@ -5,7 +5,6 @@ import { getAllCourses } from '../services/firebase';
 import type { Course } from '../types';
 import { Search, Clock, Users, Star, BookOpen } from 'lucide-react';
 
-const categoryKeys = ['Programming', 'Design', 'Business', 'Languages', 'Music', 'Health'];
 const levelKeys = ['beginner', 'intermediate', 'advanced'];
 
 export default function CoursesPage() {
@@ -13,7 +12,6 @@ export default function CoursesPage() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [category, setCategory] = useState('All');
   const [level, setLevel] = useState('All');
 
   useEffect(() => { loadCourses(); }, []);
@@ -26,11 +24,11 @@ export default function CoursesPage() {
     setLoading(false);
   }
 
+  // Фильтр: только Cybersecurity + поиск + уровень
   const filtered = courses.filter(c => {
     const matchSearch = c.title.toLowerCase().includes(search.toLowerCase()) || c.description.toLowerCase().includes(search.toLowerCase());
-    const matchCategory = category === 'All' || c.category === category;
     const matchLevel = level === 'All' || c.level === level;
-    return matchSearch && matchCategory && matchLevel;
+    return matchSearch && matchLevel;
   });
 
   return (
@@ -44,15 +42,10 @@ export default function CoursesPage() {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
           <input type="text" placeholder={t('courses.search')} value={search} onChange={e => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent dark:text-white" />
+            className="w-full pl-10 pr-4 py-2.5 bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent dark:text-white" />
         </div>
-        <select value={category} onChange={e => setCategory(e.target.value)}
-          className="px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white">
-          <option value="All">{t('courses.all')}</option>
-          {categoryKeys.map(c => <option key={c} value={c}>{t(`category.${c}`)}</option>)}
-        </select>
         <select value={level} onChange={e => setLevel(e.target.value)}
-          className="px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white capitalize">
+          className="px-4 py-2.5 bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 dark:text-white capitalize">
           <option value="All">{t('courses.allLevels')}</option>
           {levelKeys.map(l => <option key={l} value={l}>{t(`courses.${l}`)}</option>)}
         </select>
@@ -61,7 +54,7 @@ export default function CoursesPage() {
       {loading ? (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3, 4, 5, 6].map(i => (
-            <div key={i} className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden animate-pulse">
+            <div key={i} className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden animate-pulse">
               <div className="h-40 bg-gray-200 dark:bg-gray-700" />
               <div className="p-5 space-y-3"><div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4" /><div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full" /><div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2" /></div>
             </div>
@@ -72,22 +65,23 @@ export default function CoursesPage() {
           <BookOpen className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-gray-600 dark:text-gray-300 mb-1">{t('courses.noCourses')}</h3>
           <p className="text-sm text-gray-400 dark:text-gray-500">{t('courses.noCoursesSub')}</p>
+          <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">Нажмите /seed в адресной строке чтобы создать демо-курсы</p>
         </div>
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map(course => (
-            <Link key={course.id} to={`/courses/${course.id}`} className="group bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-lg hover:border-emerald-200 dark:hover:border-emerald-700 transition-all">
-              <div className="h-40 bg-gradient-to-br from-emerald-100 dark:from-emerald-900/20 to-teal-100 dark:to-teal-900/20 relative overflow-hidden">
+            <Link key={course.id} to={`/courses/${course.id}`} className="group bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-gray-700/50 overflow-hidden hover:shadow-lg hover:shadow-violet-500/10 transition-all shadow-lg">
+              <div className="h-40 bg-gradient-to-br from-violet-100 dark:from-violet-900/20 to-fuchsia-100 dark:to-fuchsia-900/20 relative overflow-hidden">
                 {course.thumbnail ? (
                   <img src={course.thumbnail} alt={course.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                 ) : (
-                  <div className="flex items-center justify-center h-full"><BookOpen className="w-12 h-12 text-emerald-300 dark:text-emerald-400/60" /></div>
+                  <div className="flex items-center justify-center h-full"><BookOpen className="w-12 h-12 text-violet-300 dark:text-violet-400/60" /></div>
                 )}
-                <div className="absolute top-3 right-3 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full px-2.5 py-1 text-xs font-medium text-emerald-700 dark:text-emerald-300 capitalize">{t(`courses.${course.level}`)}</div>
+                <div className="absolute top-3 right-3 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full px-2.5 py-1 text-xs font-medium text-violet-700 dark:text-violet-300 capitalize">{t(`courses.${course.level}`)}</div>
               </div>
               <div className="p-5">
-                <div className="text-xs font-medium text-emerald-600 dark:text-emerald-400 mb-2">{t(`category.${course.category}`) || course.category}</div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">{course.title}</h3>
+                <div className="text-xs font-medium text-violet-600 dark:text-violet-400 mb-2">Кибербезопасность</div>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2 group-hover:text-violet-700 dark:group-hover:text-violet-400 transition-colors">{course.title}</h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mb-4">{course.description}</p>
                 <div className="flex items-center justify-between text-xs text-gray-400 dark:text-gray-500">
                   <div className="flex items-center gap-3">

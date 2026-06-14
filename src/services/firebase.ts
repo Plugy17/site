@@ -163,7 +163,7 @@ export async function bookSlot(slotId: string, studentId: string, studentName: s
 
 export async function cancelSlot(slotId: string) {
   const slotRef = ref(db, `schedule/${slotId}`);
-  await update(slotRef, { studentId: null, studentName: null, status: 'available' });
+  await update(slotRef, { status: 'available' });
 }
 
 export async function deleteSlot(slotId: string) {
