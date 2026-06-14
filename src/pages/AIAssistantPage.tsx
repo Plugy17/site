@@ -78,7 +78,7 @@ export default function AIAssistant() {
 
     if (input.includes('кибербезопасность') || input.includes('cyber') || input.includes('security') || input.includes('безпек') || input.includes('безопасн')) {
       return langSafe(
-        'NovaShield Academy специализируется исключительно на **кибербезопасности**. ' +
+        'Cyber Academy специализируется исключительно на **кибербезопасности**. ' +
         'Все курсы разработаны экспертами по информационной безопасности. ' +
         'У нас вы найдете курсы по этичному хакингу, сетевой безопасности, криптографии и многому другому. ' +
         'Каждый курс включает практические задания, видеоуроки и возможность общения с преподавателем.'
@@ -162,7 +162,7 @@ export default function AIAssistant() {
 
     // Default response with actionable context
     return langSafe(
-      'Я AI-помощник NovaShield Academy 🤖\n\n' +
+      'Я AI-помощник Cyber Academy 🤖\n\n' +
       'Я могу помочь с:\n' +
       (courses.length > 0 ? `📚 Поиск среди ${courses.length} курсов\n` : '') +
       '💳 Информация о ценах\n' +
