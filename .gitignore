@@ -21,3 +21,6 @@ dist-ssr
 *.sln
 *.sw?
 .env
+deploy.sh
+public/404.html
+.github/
